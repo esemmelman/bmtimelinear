@@ -122,24 +122,19 @@ export default function App() {
 
   return (
     <main>
-      <header className="topbar">
-        <a className="brand" href="#top" aria-label="Mitzvah Status home">
-          <span className="brand-mark">מ</span>
-          <span><strong>Mitzvah Status</strong><small>Learning progress, at a glance</small></span>
-        </a>
-        {editor ? (
-          <button className="button button-light" onClick={signOut}><LogOut size={16} /> Exit editing</button>
-        ) : (
-          <button className="button button-dark" onClick={() => setLoginOpen(true)}><KeyRound size={16} /> Editor access</button>
-        )}
-      </header>
-
       <section className="sheet-section">
         <div className="sheet-heading">
-          <div>
-            <h2>Progress sheet</h2>
+          <div className="sheet-title">
+            <h2>Progress sheet</h2><span className="version">v1.1.0</span>
           </div>
-          {!editor && <div className="view-badge"><Eye size={15} /> View only</div>}
+          <div className="sheet-actions">
+            {!editor && <div className="view-badge"><Eye size={15} /> View only</div>}
+            {editor ? (
+              <button className="button button-light" onClick={signOut}><LogOut size={16} /> Exit editing</button>
+            ) : (
+              <button className="button button-dark" onClick={() => setLoginOpen(true)}><KeyRound size={16} /> Editor access</button>
+            )}
+          </div>
         </div>
 
         <div className="legend">
