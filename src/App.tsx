@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { Check, Eye, KeyRound, LoaderCircle, Lock, LogOut, RotateCcw, X } from 'lucide-react'
 import { editorEmail, supabase } from './supabase'
 
@@ -30,11 +30,6 @@ export default function App() {
   const [selected, setSelected] = useState<Status | null>('green')
   const [saving, setSaving] = useState<string | null>(null)
   const [saved, setSaved] = useState<string | null>(null)
-
-  const progress = useMemo(() => {
-    const values = Object.values(cells)
-    return { ready: values.filter((v) => v === 'green').length, marked: values.length }
-  }, [cells])
 
   async function loadSheet() {
     const [itemsResult, datesResult, cellsResult] = await Promise.all([
@@ -131,18 +126,6 @@ export default function App() {
           <button className="button button-dark" onClick={() => setLoginOpen(true)}><KeyRound size={16} /> Editor access</button>
         )}
       </header>
-
-      <section className="hero" id="top">
-        <div>
-          <p className="eyebrow">Weekly learning tracker</p>
-          <h1>Every step is worth seeing.</h1>
-          <p className="intro">Follow along as each prayer, blessing, and reading moves from practice to confidence.</p>
-        </div>
-        <div className="summary" aria-label="Progress summary">
-          <span className="summary-number">{progress.ready}</span>
-          <span><strong>ready milestones</strong><small>{progress.marked} total updates</small></span>
-        </div>
-      </section>
 
       <section className="sheet-section">
         <div className="sheet-heading">
