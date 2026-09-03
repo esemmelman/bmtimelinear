@@ -39,7 +39,6 @@ function daysFromColumnUntilEvent(dateKey: string) {
 
 export default function App() {
   const tableFrameRef = useRef<HTMLDivElement>(null)
-  const hasPositionedCurrentWeek = useRef(false)
   const [items, setItems] = useState<Item[]>([])
   const [dates, setDates] = useState<DateColumn[]>([])
   const [cells, setCells] = useState<Record<string, Status>>({})
@@ -88,18 +87,24 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    if (loading || !dates.length || hasPositionedCurrentWeek.current) return
+    if (loading || !dates.length) return
     const openingDateKey = '08-31'
-
-    requestAnimationFrame(() => {
+    const positionAtOpeningDate = () => {
       const frame = tableFrameRef.current
-      const heading = frame?.querySelector<HTMLElement>(`.date-heading[data-date-key="${openingDateKey}"]`)
-      const frozenColumn = frame?.querySelector<HTMLElement>('.skill-heading')
-      if (frame && heading && frozenColumn) {
-        frame.scrollTo({ left: Math.max(0, heading.offsetLeft - frozenColumn.offsetWidth), behavior: 'auto' })
-        hasPositionedCurrentWeek.current = true
+      const firstHeading = frame?.querySelector<HTMLElement>('.date-heading')
+      const openingIndex = dates.findIndex((date) => date.date_key === openingDateKey)
+      if (frame && firstHeading && openingIndex >= 0) {
+        frame.scrollLeft = openingIndex * firstHeading.offsetWidth
       }
-    })
+    }
+    const animationFrame = requestAnimationFrame(positionAtOpeningDate)
+    const restorationTimer = window.setTimeout(positionAtOpeningDate, 250)
+    const finalTimer = window.setTimeout(positionAtOpeningDate, 750)
+    return () => {
+      cancelAnimationFrame(animationFrame)
+      window.clearTimeout(restorationTimer)
+      window.clearTimeout(finalTimer)
+    }
   }, [dates, loading])
 
   async function signIn(event: FormEvent) {
