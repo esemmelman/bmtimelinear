@@ -16,6 +16,13 @@ const choices: { value: Status | null; label: string }[] = [
 
 const keyFor = (item: string, date: string) => `${item}::${date}`
 
+function daysUntilEvent() {
+  const today = new Date()
+  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+  const eventDate = new Date(2027, 0, 23)
+  return Math.max(0, Math.ceil((eventDate.getTime() - startOfToday.getTime()) / 86_400_000))
+}
+
 export default function App() {
   const [items, setItems] = useState<Item[]>([])
   const [dates, setDates] = useState<DateColumn[]>([])
@@ -130,7 +137,6 @@ export default function App() {
       <section className="sheet-section">
         <div className="sheet-heading">
           <div>
-            <div className="live-label"><span className="live-dot" /> Live status</div>
             <h2>Progress sheet</h2>
           </div>
           {!editor && <div className="view-badge"><Eye size={15} /> View only</div>}
@@ -159,7 +165,7 @@ export default function App() {
         <div className="table-frame">
           {loading ? <div className="loading"><LoaderCircle className="spin" /> Loading the sheet…</div> : (
             <table>
-              <thead><tr><th className="skill-heading">Prayer &amp; reading</th>{dates.map((date) => <th key={date.date_key}>{date.label}</th>)}</tr></thead>
+              <thead><tr><th className="skill-heading">Prayer &amp; reading</th>{dates.map((date) => <th className="date-heading" key={date.date_key} title={`${daysUntilEvent()} days until January 23, 2027`}>{date.label}</th>)}</tr></thead>
               <tbody>
                 {items.map((item) => (
                   <tr key={item.item_key}>
