@@ -89,14 +89,11 @@ export default function App() {
 
   useEffect(() => {
     if (loading || !dates.length || hasPositionedCurrentWeek.current) return
-    const today = new Date()
-    const monday = new Date(today.getFullYear(), today.getMonth(), today.getDate())
-    monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7))
-    const mondayKey = `${String(monday.getMonth() + 1).padStart(2, '0')}-${String(monday.getDate()).padStart(2, '0')}`
+    const openingDateKey = '08-31'
 
     requestAnimationFrame(() => {
       const frame = tableFrameRef.current
-      const heading = frame?.querySelector<HTMLElement>(`.date-heading[data-date-key="${mondayKey}"]`)
+      const heading = frame?.querySelector<HTMLElement>(`.date-heading[data-date-key="${openingDateKey}"]`)
       const frozenColumn = frame?.querySelector<HTMLElement>('.skill-heading')
       if (frame && heading && frozenColumn) {
         frame.scrollTo({ left: Math.max(0, heading.offsetLeft - frozenColumn.offsetWidth), behavior: 'auto' })
