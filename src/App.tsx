@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Check, Eye, KeyRound, LoaderCircle, Lock, LogOut, RotateCcw, X } from 'lucide-react'
 import { editorEmail, supabase } from './supabase'
 
@@ -38,6 +38,8 @@ function daysFromColumnUntilEvent(dateKey: string) {
 }
 
 export default function App() {
+  const tableFrameRef = useRef<HTMLDivElement>(null)
+  const hasPositionedCurrentWeek = useRef(false)
   const [items, setItems] = useState<Item[]>([])
   const [dates, setDates] = useState<DateColumn[]>([])
   const [cells, setCells] = useState<Record<string, Status>>({})
@@ -84,6 +86,24 @@ export default function App() {
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => setEditor(Boolean(session)))
     return () => { void supabase.removeChannel(channel); authListener.subscription.unsubscribe() }
   }, [])
+
+  useEffect(() => {
+    if (!dates.length || hasPositionedCurrentWeek.current) return
+    const today = new Date()
+    const monday = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+    monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7))
+    const mondayKey = `${String(monday.getMonth() + 1).padStart(2, '0')}-${String(monday.getDate()).padStart(2, '0')}`
+
+    requestAnimationFrame(() => {
+      const frame = tableFrameRef.current
+      const heading = frame?.querySelector<HTMLElement>(`.date-heading[data-date-key="${mondayKey}"]`)
+      const frozenColumn = frame?.querySelector<HTMLElement>('.skill-heading')
+      if (frame && heading && frozenColumn) {
+        frame.scrollTo({ left: Math.max(0, heading.offsetLeft - frozenColumn.offsetWidth), behavior: 'auto' })
+      }
+      hasPositionedCurrentWeek.current = true
+    })
+  }, [dates])
 
   async function signIn(event: FormEvent) {
     event.preventDefault()
@@ -171,7 +191,7 @@ export default function App() {
 
         {error && <div className="error-banner">{error}<button onClick={() => setError('')} aria-label="Dismiss"><X size={16} /></button></div>}
 
-        <div className="table-frame">
+        <div className="table-frame" ref={tableFrameRef}>
           {loading ? <div className="loading"><LoaderCircle className="spin" /> Loading the sheet…</div> : (
             <table>
               <thead>
@@ -180,7 +200,7 @@ export default function App() {
                   {dates.map((date, index) => <th className={`countdown-heading ${isEarlierThanCurrentWeek(date.date_key) ? 'past-week' : ''}`} key={date.date_key}>{dates.length - index}</th>)}
                 </tr>
                 <tr className="date-row">
-                  {dates.map((date) => <th className={`date-heading ${isEarlierThanCurrentWeek(date.date_key) ? 'past-week' : ''}`} key={date.date_key} title={`${daysFromColumnUntilEvent(date.date_key)} days from ${date.label} until 1/27`}>{date.label}</th>)}
+                  {dates.map((date) => <th className={`date-heading ${isEarlierThanCurrentWeek(date.date_key) ? 'past-week' : ''}`} data-date-key={date.date_key} key={date.date_key} title={`${daysFromColumnUntilEvent(date.date_key)} days from ${date.label} until 1/27`}>{date.label}</th>)}
                 </tr>
               </thead>
               <tbody>
