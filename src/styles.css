@@ -34,6 +34,7 @@ thead th { position:sticky; top:0; z-index:4; background:#f5f1ea; color:#707872;
 .countdown-heading { height:22px; color:#9b6a3b; background:#eee8de; font-size:11px; }
 .date-row th { top:22px; }
 .date-heading { width:42px; font-size:13px; font-weight:800; color:#35403b; }
+.past-week { opacity:.42; }
 th.skill-heading,tbody th { position:sticky; left:0; z-index:5; width:220px; min-width:220px; max-width:220px; padding:0 12px; text-align:left; background:#fffdf9; color:#35403b; font-weight:600; white-space:nowrap; }
 th.skill-heading { z-index:7; top:0; background:#ebe4d9; color:#26332d; }
 tbody th { font-size:14px; }

@@ -16,10 +16,21 @@ const choices: { value: Status | null; label: string }[] = [
 
 const keyFor = (item: string, date: string) => `${item}::${date}`
 
-function daysFromColumnUntilEvent(dateKey: string) {
+function dateFromKey(dateKey: string) {
   const [month, day] = dateKey.split('-').map(Number)
-  const columnYear = month === 1 ? 2027 : 2026
-  const columnDate = new Date(columnYear, month - 1, day)
+  return new Date(month === 1 ? 2027 : 2026, month - 1, day)
+}
+
+function isEarlierThanCurrentWeek(dateKey: string) {
+  const today = new Date()
+  const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+  const dayFromMonday = (startOfWeek.getDay() + 6) % 7
+  startOfWeek.setDate(startOfWeek.getDate() - dayFromMonday)
+  return dateFromKey(dateKey) < startOfWeek
+}
+
+function daysFromColumnUntilEvent(dateKey: string) {
+  const columnDate = dateFromKey(dateKey)
   const eventDate = new Date(2027, 0, 27)
   return Math.max(0, Math.round((eventDate.getTime() - columnDate.getTime()) / 86_400_000))
 }
@@ -164,10 +175,10 @@ export default function App() {
               <thead>
                 <tr className="countdown-row">
                   <th className="skill-heading" rowSpan={2}>Prayer &amp; reading</th>
-                  {dates.map((date, index) => <th className="countdown-heading" key={date.date_key}>{dates.length - index}</th>)}
+                  {dates.map((date, index) => <th className={`countdown-heading ${isEarlierThanCurrentWeek(date.date_key) ? 'past-week' : ''}`} key={date.date_key}>{dates.length - index}</th>)}
                 </tr>
                 <tr className="date-row">
-                  {dates.map((date) => <th className="date-heading" key={date.date_key} title={`${daysFromColumnUntilEvent(date.date_key)} days from ${date.label} until 1/27`}>{date.label}</th>)}
+                  {dates.map((date) => <th className={`date-heading ${isEarlierThanCurrentWeek(date.date_key) ? 'past-week' : ''}`} key={date.date_key} title={`${daysFromColumnUntilEvent(date.date_key)} days from ${date.label} until 1/27`}>{date.label}</th>)}
                 </tr>
               </thead>
               <tbody>
@@ -177,7 +188,7 @@ export default function App() {
                     {dates.map((date) => {
                       const mapKey = keyFor(item.item_key, date.date_key)
                       const status = cells[mapKey]
-                      return <td key={date.date_key}>
+                      return <td className={isEarlierThanCurrentWeek(date.date_key) ? 'past-week' : ''} key={date.date_key}>
                         <button className={`cell ${status ?? 'empty'} ${editor ? 'editable' : ''}`} disabled={!editor || saving === mapKey} onClick={() => void updateCell(item.item_key, date.date_key)} aria-label={`${item.label}, ${date.label}: ${status ?? 'not marked'}`}>
                           {saving === mapKey && <LoaderCircle className="spin" size={14} />}
                           {saved === mapKey && <Check size={15} />}
