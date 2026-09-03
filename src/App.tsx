@@ -88,7 +88,7 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    if (!dates.length || hasPositionedCurrentWeek.current) return
+    if (loading || !dates.length || hasPositionedCurrentWeek.current) return
     const today = new Date()
     const monday = new Date(today.getFullYear(), today.getMonth(), today.getDate())
     monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7))
@@ -100,10 +100,10 @@ export default function App() {
       const frozenColumn = frame?.querySelector<HTMLElement>('.skill-heading')
       if (frame && heading && frozenColumn) {
         frame.scrollTo({ left: Math.max(0, heading.offsetLeft - frozenColumn.offsetWidth), behavior: 'auto' })
+        hasPositionedCurrentWeek.current = true
       }
-      hasPositionedCurrentWeek.current = true
     })
-  }, [dates])
+  }, [dates, loading])
 
   async function signIn(event: FormEvent) {
     event.preventDefault()
