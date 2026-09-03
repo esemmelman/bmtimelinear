@@ -31,9 +31,11 @@ h1 { font-size:clamp(42px,6vw,78px); max-width:720px; letter-spacing:-.045em; }
 table { border-collapse:separate; border-spacing:0; width:max-content; font-size:11px; table-layout:fixed; }
 th,td { border-right:1px solid #ebe7df; border-bottom:1px solid #ebe7df; padding:0; height:25px; }
 thead th { position:sticky; top:0; z-index:4; background:#f5f1ea; color:#707872; min-width:42px; font-weight:700; text-align:center; }
+.countdown-heading { height:22px; color:#9b6a3b; background:#eee8de; font-size:11px; }
+.date-row th { top:22px; }
 .date-heading { width:42px; font-size:13px; font-weight:800; color:#35403b; }
 th.skill-heading,tbody th { position:sticky; left:0; z-index:5; width:220px; min-width:220px; max-width:220px; padding:0 12px; text-align:left; background:#fffdf9; color:#35403b; font-weight:600; white-space:nowrap; }
-th.skill-heading { z-index:7; background:#ebe4d9; color:#26332d; }
+th.skill-heading { z-index:7; top:0; background:#ebe4d9; color:#26332d; }
 tbody th { font-size:14px; }
 tbody tr:hover th { background:#faf5eb; } tbody tr:hover td { background:#fcfaf6; }
 td { min-width:42px; width:42px; background:#fff; padding:3px; }

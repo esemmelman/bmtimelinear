@@ -161,7 +161,15 @@ export default function App() {
         <div className="table-frame">
           {loading ? <div className="loading"><LoaderCircle className="spin" /> Loading the sheet…</div> : (
             <table>
-              <thead><tr><th className="skill-heading">Prayer &amp; reading</th>{dates.map((date) => <th className="date-heading" key={date.date_key} title={`${daysFromColumnUntilEvent(date.date_key)} days from ${date.label} until 1/27`}>{date.label}</th>)}</tr></thead>
+              <thead>
+                <tr className="countdown-row">
+                  <th className="skill-heading" rowSpan={2}>Prayer &amp; reading</th>
+                  {dates.map((date, index) => <th className="countdown-heading" key={date.date_key}>{dates.length - index}</th>)}
+                </tr>
+                <tr className="date-row">
+                  {dates.map((date) => <th className="date-heading" key={date.date_key} title={`${daysFromColumnUntilEvent(date.date_key)} days from ${date.label} until 1/27`}>{date.label}</th>)}
+                </tr>
+              </thead>
               <tbody>
                 {items.map((item) => (
                   <tr key={item.item_key}>
