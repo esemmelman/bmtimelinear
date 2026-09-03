@@ -16,11 +16,12 @@ const choices: { value: Status | null; label: string }[] = [
 
 const keyFor = (item: string, date: string) => `${item}::${date}`
 
-function daysUntilEvent() {
-  const today = new Date()
-  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+function daysFromColumnUntilEvent(dateKey: string) {
+  const [month, day] = dateKey.split('-').map(Number)
+  const columnYear = month === 1 ? 2027 : 2026
+  const columnDate = new Date(columnYear, month - 1, day)
   const eventDate = new Date(2027, 0, 23)
-  return Math.max(0, Math.ceil((eventDate.getTime() - startOfToday.getTime()) / 86_400_000))
+  return Math.max(0, Math.round((eventDate.getTime() - columnDate.getTime()) / 86_400_000))
 }
 
 export default function App() {
@@ -160,7 +161,7 @@ export default function App() {
         <div className="table-frame">
           {loading ? <div className="loading"><LoaderCircle className="spin" /> Loading the sheet…</div> : (
             <table>
-              <thead><tr><th className="skill-heading">Prayer &amp; reading</th>{dates.map((date) => <th className="date-heading" key={date.date_key} title={`${daysUntilEvent()} days until January 23, 2027`}>{date.label}</th>)}</tr></thead>
+              <thead><tr><th className="skill-heading">Prayer &amp; reading</th>{dates.map((date) => <th className="date-heading" key={date.date_key} title={`${daysFromColumnUntilEvent(date.date_key)} days from ${date.label} until January 23, 2027`}>{date.label}</th>)}</tr></thead>
               <tbody>
                 {items.map((item) => (
                   <tr key={item.item_key}>
