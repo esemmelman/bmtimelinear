@@ -31,6 +31,8 @@ h1 { font-size:clamp(42px,6vw,78px); max-width:720px; letter-spacing:-.045em; }
 .table-frame::-webkit-scrollbar { height:13px; width:13px; }
 .table-frame::-webkit-scrollbar-track { background:#ebe7df; }
 .table-frame::-webkit-scrollbar-thumb { background:#8a928d; border:3px solid #ebe7df; border-radius:999px; }
+.table-scroll-content { display:flex; align-items:flex-start; width:max-content; min-width:100%; }
+.scroll-space { width:100vw; height:1px; flex:none; }
 table { border-collapse:separate; border-spacing:0; width:max-content; font-size:11px; table-layout:fixed; }
 th,td { border-right:1px solid #ebe7df; border-bottom:1px solid #ebe7df; padding:0; height:25px; }
 thead th { position:sticky; top:0; z-index:4; background:#f5f1ea; color:#707872; min-width:42px; font-weight:700; text-align:center; }

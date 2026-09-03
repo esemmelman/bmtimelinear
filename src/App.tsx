@@ -193,7 +193,7 @@ export default function App() {
 
         <div className="table-frame" ref={tableFrameRef}>
           {loading ? <div className="loading"><LoaderCircle className="spin" /> Loading the sheet…</div> : (
-            <table>
+            <div className="table-scroll-content"><table>
               <thead>
                 <tr className="countdown-row">
                   <th className="skill-heading" rowSpan={2}>Prayer &amp; reading</th>
@@ -220,7 +220,7 @@ export default function App() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table><div className="scroll-space" aria-hidden="true" /></div>
           )}
         </div>
         <p className="scroll-note">Swipe sideways to see every week →</p>
