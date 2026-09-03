@@ -26,7 +26,9 @@ function isEarlierThanCurrentWeek(dateKey: string) {
   const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate())
   const dayFromMonday = (startOfWeek.getDay() + 6) % 7
   startOfWeek.setDate(startOfWeek.getDate() - dayFromMonday)
-  return dateFromKey(dateKey) < startOfWeek
+  const oneWeekBefore = new Date(startOfWeek)
+  oneWeekBefore.setDate(oneWeekBefore.getDate() - 7)
+  return dateFromKey(dateKey) < oneWeekBefore
 }
 
 function daysFromColumnUntilEvent(dateKey: string) {
