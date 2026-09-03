@@ -159,7 +159,7 @@ export default function App() {
       <section className="sheet-section">
         <div className="sheet-heading">
           <div className="sheet-title">
-            <h2>Progress sheet</h2><span className="version">v1.1.0</span>
+            <h2>Progress sheet</h2>
           </div>
           <div className="sheet-actions">
             {!editor && <div className="view-badge"><Eye size={15} /> View only</div>}
@@ -168,6 +168,7 @@ export default function App() {
             ) : (
               <button className="button button-dark" onClick={() => setLoginOpen(true)}><KeyRound size={16} /> Editor access</button>
             )}
+            <span className="version">v1.1.0</span>
           </div>
         </div>
 
